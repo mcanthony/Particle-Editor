@@ -1,0 +1,197 @@
+<html ng-app="app">
+  <head>
+    <title>Particle</title>
+    <link rel="stylesheet" href="../content/styles/app.css" charset="utf-8">
+    <link rel="stylesheet" href="../bower_components/codemirror/lib/codemirror.css" charset="utf-8">
+    <link rel="stylesheet" href="../bower_components/codemirror/addon/hint/show-hint.css" charset="utf-8">
+    <link rel="stylesheet" href="../bower_components/codemirror/addon/fold/foldgutter.css" charset="utf-8">
+
+    <link rel="stylesheet" href="../bower_components/angular-tree-control/css/tree-control.css" charset="utf-8">
+    <link rel="stylesheet" href="../bower_components/angular-tree-control/css/tree-control-attribute.css" charset="utf-8">
+  </head>
+  <body unresolved fullbleed layout vertical ng-controller="EditorCtrl">
+
+    <div class="window-dialogs">
+      <input id="open-folder-dialog" type="file" nwdirectory />
+      <input id="open-file-dialog" type="file"/>
+    </div>
+
+    <header class="window-chrome" layout horizontal  ng-controller="WindowCtrl">
+        <section flex class="header-menu">
+          <ul>
+            <li>
+              <span>File</span>
+              <ul>
+                <li>
+                  <span>New Project</span>
+                </li>
+                <li ng-click="showFileDialog()">
+                  <span>Open File</span>
+                </li>
+                <li ng-click="showFolderDialog()">
+                  <span>Open Folder</span>
+                </li>
+                <li>
+                  <span>Save</span>
+                </li>
+                <li>
+                  <span>Save As...</span>
+                </li>
+                <li>
+                  <span>Save All</span>
+                </li>
+                <li class="menu-break"></li>
+                <li>
+                  <span>New Window</span>
+                </li>
+                <li>
+                  <span>Close Window</span>
+                </li>
+                <li class="menu-break"></li>
+                <li>
+                  <span>Close File</span>
+                </li>
+                <li>
+                  <span>Close All Files</span>
+                </li>
+                <li class="menu-break"></li>
+                <li ng-click="close()">
+                  <span>Exit</span>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <span>Edit</span>
+              <ul>
+                <li>
+                  <span>Undo</span>
+                </li>
+                <li>
+                  <span>Redo</span>
+                </li>
+                <li class="menu-break"></li>
+                <li>
+                  <span>Cut</span>
+                </li>
+                <li>
+                  <span>Copy</span>
+                </li>
+                <li>
+                  <span>Paste</span>
+                </li>
+                <li>
+                  <span>Select All</span>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <span>View</span>
+            </li>
+            <li>
+              <span>Selection</span>
+            </li>
+            <li>
+              <span>Find</span>
+            </li>
+            <li>
+              <span>Help</span>
+            </li>
+          </ul>
+        </section>
+
+        <section horizontal layout>
+            <span ng-click="minimize()" class="close-button" horizontal center center-justified layout>
+              <core-icon icon="remove"></core-icon>
+            </span>
+            <span ng-click="toggleMaximize()" class="close-button" horizontal center center-justified layout>
+              <core-icon style="{{windowState === 'unmaximized' ? 'width: 22px; height: 22px;' : 'width: 18px; height: 18px;'}}" icon="{{windowState === 'unmaximized' ? 'image:crop-square' : 'image:filter-none'}}"></core-icon>
+            </span>
+            <span ng-click="close()" class="close-button" horizontal center center-justified layout>
+              <core-icon icon="close"></core-icon>
+            </span>
+          </section>
+    </header>
+
+    <core-drawer-panel>
+
+      <core-header-panel ng-controller="ExplorerCtrl" drawer mode="seamed">
+        <treecontrol class="tree-classic" tree-model="directory" options="opts" on-selection="openFile(node)">
+          {{node.name}}
+        </treecontrol>
+      </core-header-panel>
+
+      <core-header-panel mode="" flex main>
+
+        <core-toolbar class="medium-tall">
+          <paper-icon-button core-drawer-toggle icon="menu"></paper-icon-button>
+          <span flex>Particle Editor</span>
+          <paper-tabs selected="{{selectedTab}}" id="main-tabs" class="bottom fit editor-tabs" horizontal layout center scrollable>
+            <paper-tab class="file-tabs" id="{{tab.id}}" ng-repeat="tab in tabs" data-path="{{tab.path}}" ng-click="activateTab(tab.path)">
+              {{tab.name}}
+              <paper-icon-button icon="close" ng-click="closeTab(tab.path)"></paper-icon-button>
+            </paper-tab>
+          </paper-tabs>
+        </core-toolbar>
+
+        <main class="editor-container">
+          <code-editor ng-show="activeTab == tab.path" ng-repeat="tab in tabs" path="{{tab.path}}" content="{{tab.data}}"></code-editor>
+        </main>
+
+      </core-header-panel>
+
+    </core-drawer-panel>
+
+    <footer class="status-bar" center layout horizontal>
+      <section class="status-left">
+        <span>Line {{line}}, Column {{char}}</span>
+      </section>
+      <span flex></span>
+      <section class="status-right">
+        <span>UTF-8</span>
+        <span>JavaScript</span>
+      </section>
+    </footer>
+
+    <!-- Angular JS & JQuery -->
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-tree-control/angular-tree-control.js"></script>
+
+    <!-- App Dependencies -->
+    <script type="text/javascript" src="../scripts/window/window.js"></script>
+    <script type="text/javascript" src="../scripts/window/windowCtrl.js"></script>
+    <script type="text/javascript" src="../scripts/editor/editor.js"></script>
+    <script type="text/javascript" src="../scripts/editor/editorCtrl.js"></script>
+    <script type="text/javascript" src="../scripts/explorer/explorer.js"></script>
+    <script type="text/javascript" src="../scripts/explorer/explorerCtrl.js"></script>
+    <script type="text/javascript" src="../scripts/editor/editorDirective.js"></script>
+
+    <!-- App -->
+    <script type="text/javascript" src="../scripts/app/app.js"></script>
+    <script type="text/javascript" src="../scripts/app/app.config.js"></script>
+
+    <script type="text/javascript" src="../scripts/window/rightClickDirective.js"></script>
+
+    <!-- Polymer -->
+    <script type="text/javascript" src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="../bower_components/polymer/polymer.html">
+
+    <!-- Polymer Core Components -->
+    <link rel="import" href="../bower_components/core-header-panel/core-header-panel.html">
+    <link rel="import" href="../bower_components/core-drawer-panel/core-drawer-panel.html">
+    <link rel="import" href="../bower_components/core-toolbar/core-toolbar.html">
+    <link rel="import" href="../bower_components/core-icon/core-icon.html">
+    <link rel="import" href="../bower_components/core-icons/image-icons.html">
+
+    <!-- Polymer Paper Components -->
+    <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+    <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+    <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+
+    <!-- Codemirror -->
+    <script type="text/javascript" src="../bower_components/ace/ace.js"></script>
+    <script type="text/javascript" src="../bower_components/ace/ext-language_tools.js"></script>
+    <script type="text/javascript" src="../bower_components/ace/ext-modelist.js"></script>
+
+  </body>
+</html>

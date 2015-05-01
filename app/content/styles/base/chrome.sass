@@ -1,0 +1,78 @@
+.window-chrome
+  background-color: #00897B
+  color: #FFFFFF
+  height: 32px
+  width: 100%
+  -webkit-app-region: drag
+
+  .close-button
+    width: 32px
+    height: 32px
+    -webkit-app-region: no-drag
+
+    &:hover
+      background-color: rgba(0,0,0,.1)
+
+  .header-menu
+    ul
+      list-style: none
+
+      li
+        -webkit-app-region: no-drag
+        display: inline-block
+
+        span
+          display: block
+          color: #FFFFFF
+          font-size: 12px
+          padding: 9px 10px
+          cursor: default
+
+          &:hover
+            background-color: rgba(0,0,0,.1)
+
+        &:hover ul
+          display: block !important
+          z-index: 100
+
+        ul
+          display: none
+          position: absolute
+          background-color: #FFFFFF
+          box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
+          border-radius: 2px
+          margin-top: -1px
+
+          .menu-break
+            padding: 0
+            width: 100%
+            display: block
+            height: 1px
+            margin: 0
+            background-color: rgba(0,0,0,.1)
+
+          li
+            display: block
+
+            span
+              font-size: 14px
+              padding: 8px 32px 8px 24px
+              color: #333333
+              cursor: pointer
+
+
+.window-controls
+  background-color: red
+  width: 128px
+  float: right
+
+.status-bar
+  height: 32px
+  background-color: #00897B
+  color: #FFFFFF
+  font-size: 12px
+  padding: 0 24px
+
+  .status-right
+    span
+      margin-left: 16px

@@ -1,0 +1,10 @@
+{
+  "name": "Particle Text Editor",
+  "version": "0.0.1",
+  "private": true,
+  "main": "app://app/app/views/index.html",
+  "window": {
+    "toolbar": false,
+    "frame": false
+  }
+}
