@@ -15,8 +15,6 @@ Particle code editor is a simple code editor built in NW.js. This is a small pro
 
 ### Installation
 
-You need Gulp installed globally:
-
 ```sh
 $ git clone https://github.com/Wheately/Particle-Editor.git
 ```
